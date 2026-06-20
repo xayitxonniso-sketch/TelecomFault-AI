@@ -1,4 +1,19 @@
 import streamlit as st
+import pickle
 
-st.title("📡 TelecomFault AI")
-st.write("AI-based Telecom Complaint Classifier & Priority Detector")
+model = pickle.load(open("model.pkl", "rb"))
+vectorizer = pickle.load(open("vector.pkl", "rb"))
+
+st.set_page_config(page_title="TelecomFault AI", page_icon="📡")
+
+st.title("📡 TelecomFault AI - Hackathon Project")
+st.write("AI detects telecom network issues from user complaints")
+
+text = st.text_input("Enter complaint:")
+
+if text:
+    vec = vectorizer.transform([text])
+    prediction = model.predict(vec)[0]
+
+    st.success("Predicted Issue:")
+    st.markdown(f"### ⚠️ {prediction}")
